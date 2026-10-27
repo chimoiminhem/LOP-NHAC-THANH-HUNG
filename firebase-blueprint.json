@@ -1,0 +1,146 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile document representing teacher or studio team member account.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 256 },
+        "photoURL": { "type": "string", "maxLength": 2048 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["uid", "email"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Music student record with attendance sessions, branch assignment, package and status.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 256 },
+        "phone": { "type": "string", "maxLength": 64 },
+        "instrument": { "type": "string", "enum": ["Piano", "Guitar", "Ukulele", "Bass", "Electric Guitar"] },
+        "scheduleString": { "type": "string", "maxLength": 256 },
+        "teacher": { "type": "string", "maxLength": 256 },
+        "branch": { "type": "string", "maxLength": 256 },
+        "room": { "type": "string", "maxLength": 128 },
+        "startDate": { "type": "string", "maxLength": 64 },
+        "packageType": { "type": "string", "enum": ["8 buổi", "24 buổi", "36 buổi"] },
+        "status": { "type": "string", "enum": ["Đang học", "Bảo Lưu", "Nghỉ Học"] },
+        "feeStatus": { "type": "string", "maxLength": 64 },
+        "notes": { "type": "string", "maxLength": 2048 },
+        "sessions": { "type": "array" },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name", "instrument", "scheduleString"]
+    },
+    "Teacher": {
+      "title": "Teacher",
+      "description": "Music teacher profile and assignment details.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 256 },
+        "phone": { "type": "string", "maxLength": 64 },
+        "branch": { "type": "string", "maxLength": 256 },
+        "instruments": { "type": "array" },
+        "status": { "type": "string", "enum": ["Hoạt Động", "Nghỉ"] },
+        "notes": { "type": "string", "maxLength": 2048 },
+        "email": { "type": "string", "maxLength": 256 },
+        "startDate": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name", "branch", "instruments", "status"]
+    },
+    "Branch": {
+      "title": "Branch",
+      "description": "Studio campus location/branch details and room assignments.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 256 },
+        "address": { "type": "string", "maxLength": 512 },
+        "phone": { "type": "string", "maxLength": 64 },
+        "manager": { "type": "string", "maxLength": 256 },
+        "rooms": { "type": "array" },
+        "notes": { "type": "string", "maxLength": 2048 },
+        "isDefault": { "type": "boolean" },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name"]
+    },
+    "StudioSettings": {
+      "title": "StudioSettings",
+      "description": "Studio preferences and Google Sheets synchronization link shared across team members.",
+      "type": "object",
+      "properties": {
+        "spreadsheetUrl": { "type": "string", "maxLength": 2048 },
+        "studioName": { "type": "string", "maxLength": 256 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      }
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Team chat message or student handover note shared across 2-5 studio teachers in real time.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "senderId": { "type": "string", "maxLength": 128 },
+        "senderName": { "type": "string", "maxLength": 256 },
+        "senderPhoto": { "type": "string", "maxLength": 2048 },
+        "senderRole": { "type": "string", "maxLength": 64 },
+        "text": { "type": "string", "maxLength": 2048 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "deviceType": { "type": "string", "enum": ["PC", "Điện thoại", "iPad", "Web"] }
+      },
+      "required": ["id", "senderName", "text", "createdAt"]
+    },
+    "MemberPresence": {
+      "title": "MemberPresence",
+      "description": "Online presence and device status for each of the 2-5 studio team members.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 256 },
+        "email": { "type": "string", "maxLength": 256 },
+        "photoURL": { "type": "string", "maxLength": 2048 },
+        "device": { "type": "string", "maxLength": 64 },
+        "lastSeen": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["userId", "name"]
+    }
+  },
+  "firestore": {
+    "/studios/{studioId}/students/{studentId}": {
+      "schema": "Student",
+      "description": "Shared real-time student collection for the 2-5 studio team members"
+    },
+    "/studios/{studioId}/teachers/{teacherId}": {
+      "schema": "Teacher",
+      "description": "Shared real-time teachers collection for the studio team"
+    },
+    "/studios/{studioId}/branches/{branchId}": {
+      "schema": "Branch",
+      "description": "Shared real-time branch campuses for the studio team"
+    },
+    "/studios/{studioId}/settings/{settingId}": {
+      "schema": "StudioSettings",
+      "description": "Shared studio settings and Google Sheet sync link"
+    },
+    "/studios/{studioId}/messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Real-time team chat and handover notes between teachers"
+    },
+    "/studios/{studioId}/members/{memberId}": {
+      "schema": "MemberPresence",
+      "description": "Active members presence in the shared studio workspace"
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile document for signed in teacher or studio member"
+    }
+  }
+}

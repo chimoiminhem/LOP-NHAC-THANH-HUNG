@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: #1e293b;
+  background-color: #f1f5f9;
+}
+
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* =========================================================================
+   ĐỊNH DẠNG IN ẤN CHUYÊN NGHIỆP (@media print)
+   Ẩn toàn bộ thanh điều hướng, nút bấm, biểu đồ và chỉ hiển thị phiếu theo dõi giấy
+   ========================================================================= */
+
+/* Khi duyệt trên màn hình: Ẩn phần tử in chuyên biệt */
+#print-sheet-root {
+  display: none;
+}
+
+@media print {
+  /* Cấu hình khổ giấy A4 đứng chuẩn */
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Ẩn các thành phần giao diện không in */
+  header,
+  footer,
+  nav,
+  button,
+  .no-print,
+  .recharts-responsive-container,
+  input[type="file"],
+  .fixed.bottom-6,
+  [role="alert"] {
+    display: none !important;
+  }
+
+  /* KHI IN PHIẾU THEO DÕI HỌC VIÊN:
+     Ẩn hoàn toàn ứng dụng web (#root), chỉ in duy nhất phiếu học viên (#print-sheet-root) */
+  body.print-student-active > #root {
+    display: none !important;
+  }
+
+  body.print-student-active > #print-sheet-root {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  /* Định dạng bảng điểm danh sắc nét, tránh ngắt trang giữa hàng */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  tr, .page-break-inside-avoid {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  th, td {
+    border-color: #64748b !important;
+  }
+
+  /* Hiển thị giá trị văn bản sạch sẽ cho input / select */
+  input, select, textarea {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    color: #0f172a !important;
+  }
+}
