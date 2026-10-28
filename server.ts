@@ -127,8 +127,10 @@ async function startServer() {
         });
       }
 
-      // Xóa tiền tố data:image/... nếu có
-      const cleanBase64 = imageBase64.replace(/^data:image\/[a-zA-Z+]+;base64,/, '');
+      // Xóa tiền tố data:...;base64, và khoảng trắng nếu có
+      const cleanBase64 = imageBase64
+        .replace(/^data:[^;]+;base64,/, '')
+        .replace(/\s+/g, '');
 
       // Kiểm tra API client
       const ai = getAiClient();
@@ -243,7 +245,14 @@ Hãy trả về kết quả dưới dạng JSON theo đúng schema.`;
         throw new Error('Mô hình Gemini không phản hồi nội dung.');
       }
 
-      const parsedData = JSON.parse(responseText);
+      let cleanJson = responseText.trim();
+      if (cleanJson.startsWith('```json')) {
+        cleanJson = cleanJson.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+      } else if (cleanJson.startsWith('```')) {
+        cleanJson = cleanJson.replace(/^```\s*/, '').replace(/\s*```$/, '');
+      }
+
+      const parsedData = JSON.parse(cleanJson);
 
       return res.json({
         success: true,
