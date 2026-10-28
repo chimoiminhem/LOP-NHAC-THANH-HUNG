@@ -60,11 +60,11 @@ export const StudentPrintModal: React.FC<StudentPrintModalProps> = ({
                 <Music className="w-4 h-4 text-emerald-400" />
               </div>
               <span className="font-extrabold text-sm sm:text-base tracking-wider uppercase text-slate-900">
-                HARMONY MUSIC STUDIO
+                GRACE MUSIC CLASS
               </span>
             </div>
             <p className="text-[11px] text-slate-600 mt-1">
-              Hệ thống Đào tạo Âm nhạc Chuyên nghiệp • Hotline: 0988.123.456
+              Hệ thống Đào tạo Âm nhạc Chuyên nghiệp • Hotline: 0902391605
             </p>
             <p className="text-[10px] text-slate-500">
               Cơ sở: {student.branch || 'Trụ sở chính - Quận 1, TP. Hồ Chí Minh'}
